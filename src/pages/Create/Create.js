@@ -1,14 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import './create.css';
+import { useFetch } from '../../hooks/useFetch';
 
 const Create = () => {
   const [title, setTitle] = useState('');
   const [method, setMethod] = useState('');
   const [cookingTime, setCookingTime] = useState('');
+  const [newIngredient, setNewIngredient] = useState('');
+  const [ingredients, setIngredients] = useState([]);
+  const ingredientInput = useRef(null);
+
+  const { postData, data, error } = useFetch(
+    'http://localhost:3000/recipes/',
+    'POST'
+  );
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(title, method, cookingTime);
+    postData({
+      title,
+      method,
+      cookingTime: cookingTime + ' minutes',
+      ingredients,
+    });
+  };
+
+  const handleAdd = (e) => {
+    e.preventDefault();
+    const ing = newIngredient.trim();
+
+    if (ing && !ingredients.includes(ing)) {
+      setIngredients((prevIng) => [...prevIng, ing]);
+    }
+    setNewIngredient('');
+    ingredientInput.current.focus();
   };
 
   return (
@@ -24,7 +49,28 @@ const Create = () => {
             required
           />
         </label>
-        {/* ingridients */}
+
+        <label>
+          <span>Recipe ingredients:</span>
+          <div className='ingredients'>
+            <input
+              type='text'
+              onChange={(e) => setNewIngredient(e.target.value)}
+              value={newIngredient}
+              ref={ingredientInput}
+            />
+            <button className='btn' onClick={handleAdd}>
+              add
+            </button>
+          </div>
+        </label>
+        <p>
+          Current ingredients:{' '}
+          {ingredients.map((ing) => (
+            <em key={ing}>{ing}, </em>
+          ))}
+        </p>
+
         <label>
           <span>Cooking method</span>
           <textarea
