@@ -47,6 +47,17 @@
         "Fluor"
       ],
       "id": "Bb4rNta"
+    },
+    {
+      "title": "Shorpa",
+      "method": "super easy peazy",
+      "cookingTime": "45 minutes",
+      "ingredients": [
+        "Meat",
+        "potatoes",
+        "carrots"
+      ],
+      "id": "Ic8n1Zp"
     }
   ]
 }
